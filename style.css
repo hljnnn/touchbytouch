@@ -27,6 +27,9 @@ body {
     overflow: hidden;
     margin: 10px 0;
     border: 3px solid #ff4d6d;
+    touch-action: none; /* This disables scrolling/zooming inside the game area */
+    -webkit-user-select: none; /* Prevents text selection while tapping */
+    user-select: none;
 }
 
 /* Bigger hearts for easier tapping */
