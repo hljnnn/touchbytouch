@@ -1,51 +1,39 @@
-/* Ensure the body doesn't bounce or scroll on mobile */
-body {
-    background-color: #fff0f3;
-    margin: 0;
-    overflow: hidden; 
-    touch-action: none; /* Prevents zooming/scrolling while playing */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: sans-serif;
-}
+function spawnHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    
+    // Random positions (calculated for mobile screen)
+    const x = Math.random() * (gameArea.clientWidth - 60);
+    const y = Math.random() * (gameArea.clientHeight - 60);
+    
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
 
-#game-container {
-    width: 90vw;
-    max-width: 400px;
-    height: 95vh;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-}
+    // "pointerdown" is faster than "click" on mobile
+    heart.addEventListener('pointerdown', function(e) {
+    // This stops the browser from thinking you're trying to scroll
+    e.preventDefault(); 
+    e.stopPropagation();
 
-#game-area {
-    flex-grow: 1; /* Fills the remaining screen space */
-    background: #ffe5ec;
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-    margin: 10px 0;
-    border: 3px solid #ff4d6d;
-    touch-action: none; /* This disables scrolling/zooming inside the game area */
-    -webkit-user-select: none; /* Prevents text selection while tapping */
-    user-select: none;
-}
+    score++;
+    scoreDisplay.textContent = score;
+    
+    // Immediate visual feedback
+    this.style.display = 'none'; 
+    this.remove();
+    
+    spawnHeart();
+}, { passive: false }); // 'passive: false' allows preventDefault to work
 
-/* Bigger hearts for easier tapping */
-.heart {
-    position: absolute;
-    font-size: 45px; /* Increased size for thumbs */
-    user-select: none;
-    -webkit-tap-highlight-color: transparent; /* Removes blue flash on tap */
-}
+    gameArea.appendChild(heart);
 
-#start-btn {
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    border-radius: 50px;
-    background: #ff4d6d;
-    color: white;
-    border: none;
-    font-weight: bold;
+    // Fade out effect
+    setTimeout(() => {
+        if(heart.parentElement) {
+            heart.style.transition = "opacity 0.5s";
+            heart.style.opacity = "0";
+            setTimeout(() => heart.remove(), 500);
+        }
+    }, 1200);
 }
